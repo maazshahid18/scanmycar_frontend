@@ -1,19 +1,105 @@
 export default function HomePage() {
   return (
-    <div className="text-center py-24 px-4">
-      <h1 className="text-5xl font-bold mb-6 text-gray-900 dark:text-white">ScanMyCar 🚗</h1>
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-800">
+      <div className="max-w-4xl mx-auto px-4 py-16">
+        {/* Hero Section */}
+        <div className="text-center mb-16">
+          <h1 className="text-6xl font-bold mb-6 text-gray-900 dark:text-white">
+            ScanMyCar 🚗
+          </h1>
+          <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto mb-8 leading-relaxed">
+            Never miss an urgent notification about your parked vehicle.
+            Get instant alerts when someone needs you to move your car.
+          </p>
+        </div>
 
-      <p className="text-gray-600 dark:text-gray-300 max-w-lg mx-auto mb-10 text-lg leading-relaxed">
-        A simple way to notify vehicle owners when their car is blocking someone.
-        Register your vehicle and get your QR code.
-      </p>
+        {/* Features Grid */}
+        <div className="grid md:grid-cols-3 gap-6 mb-12">
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+            <div className="text-4xl mb-4">📱</div>
+            <h3 className="text-lg font-semibold mb-2 text-gray-900 dark:text-white">Instant Notifications</h3>
+            <p className="text-gray-600 dark:text-gray-400 text-sm">
+              Receive push notifications immediately when someone scans your QR code
+            </p>
+          </div>
 
-      <a
-        href="/register"
-        className="inline-block bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white px-8 py-3.5 rounded-xl text-lg font-medium shadow-lg hover:shadow-xl transition-all active:scale-95"
-      >
-        Register Your Vehicle
-      </a>
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+            <div className="text-4xl mb-4">🔒</div>
+            <h3 className="text-lg font-semibold mb-2 text-gray-900 dark:text-white">Privacy First</h3>
+            <p className="text-gray-600 dark:text-gray-400 text-sm">
+              Your contact info stays private. Notifications come directly to your device
+            </p>
+          </div>
+
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+            <div className="text-4xl mb-4">⚡</div>
+            <h3 className="text-lg font-semibold mb-2 text-gray-900 dark:text-white">Quick Setup</h3>
+            <p className="text-gray-600 dark:text-gray-400 text-sm">
+              Register in seconds, download your QR code, and stick it on your windshield
+            </p>
+          </div>
+        </div>
+
+        {/* CTA Buttons */}
+        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+          <a
+            href="/register"
+            className="inline-block bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white px-8 py-4 rounded-xl text-lg font-medium shadow-lg hover:shadow-xl transition-all active:scale-95 w-full sm:w-auto text-center"
+          >
+            Register Your Vehicle
+          </a>
+          <a
+            href="/dashboard"
+            className="inline-block bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-900 dark:text-white px-8 py-4 rounded-xl text-lg font-medium shadow-sm hover:shadow-md transition-all active:scale-95 w-full sm:w-auto text-center"
+          >
+            View My QR Code
+          </a>
+        </div>
+
+        {/* How it Works */}
+        <div className="mt-20">
+          <h2 className="text-3xl font-bold text-center mb-10 text-gray-900 dark:text-white">
+            How It Works
+          </h2>
+          <div className="space-y-6">
+            <div className="flex gap-4 items-start">
+              <div className="flex-shrink-0 w-10 h-10 bg-blue-600 dark:bg-blue-500 text-white rounded-full flex items-center justify-center font-bold">
+                1
+              </div>
+              <div>
+                <h4 className="font-semibold text-gray-900 dark:text-white mb-1">Register Your Vehicle</h4>
+                <p className="text-gray-600 dark:text-gray-400 text-sm">
+                  Enter your vehicle number and mobile number to create your unique QR code
+                </p>
+              </div>
+            </div>
+
+            <div className="flex gap-4 items-start">
+              <div className="flex-shrink-0 w-10 h-10 bg-blue-600 dark:bg-blue-500 text-white rounded-full flex items-center justify-center font-bold">
+                2
+              </div>
+              <div>
+                <h4 className="font-semibold text-gray-900 dark:text-white mb-1">Download & Display</h4>
+                <p className="text-gray-600 dark:text-gray-400 text-sm">
+                  Download your QR code and place it on your car's windshield
+                </p>
+              </div>
+            </div>
+
+            <div className="flex gap-4 items-start">
+              <div className="flex-shrink-0 w-10 h-10 bg-blue-600 dark:bg-blue-500 text-white rounded-full flex items-center justify-center font-bold">
+                3
+              </div>
+              <div>
+                <h4 className="font-semibold text-gray-900 dark:text-white mb-1">Get Instant Alerts</h4>
+                <p className="text-gray-600 dark:text-gray-400 text-sm">
+                  When someone scans your QR, you'll receive an instant notification on your device
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

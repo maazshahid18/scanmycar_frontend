@@ -1,8 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import api from "@/lib/api";
-import Button from "@/components/Button";
 import { ensurePushSubscription } from "@/lib/push";
 import toast from "react-hot-toast";
 
@@ -11,115 +10,233 @@ interface Vehicle {
   vehicleNumber: string;
   qrCodeId: string;
   qrImage: string;
+  mobileNumber: string;
 }
 
 export default function Dashboard() {
-  const [vehicles, setVehicles] = useState<Vehicle[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [vehicleNumber, setVehicleNumber] = useState("");
+  const [mobileNumber, setMobileNumber] = useState("");
+  const [vehicle, setVehicle] = useState<Vehicle | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [notFound, setNotFound] = useState(false);
 
-  useEffect(() => {
-    // TODO: Replace ownerId with actual auth user ID
-    api.get("/vehicles/owner/1").then((res) => {
-      setVehicles(res.data);
+  const handleLookup = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setNotFound(false);
+    setVehicle(null);
+
+    try {
+      // Search for vehicle by vehicle number and mobile number
+      const response = await api.get(`/vehicles/lookup`, {
+        params: {
+          vehicleNumber: vehicleNumber.trim(),
+          mobileNumber: mobileNumber.trim(),
+        },
+      });
+
+      if (response.data) {
+        setVehicle(response.data);
+        toast.success("Vehicle found!");
+      } else {
+        setNotFound(true);
+      }
+    } catch (error: any) {
+      console.error("Lookup error:", error);
+      if (error.response?.status === 404) {
+        setNotFound(true);
+        toast.error("Vehicle not found. Please check your details.");
+      } else {
+        toast.error("Failed to lookup vehicle");
+      }
+    } finally {
       setLoading(false);
-    });
-  }, []);
+    }
+  };
 
   const testNotification = async () => {
-    if (Notification.permission === 'granted') {
-      new Notification('Test Notification', {
-        body: 'This is a test notification',
-        tag: 'test',
+    if (Notification.permission === "granted") {
+      new Notification("Test Notification", {
+        body: "This is a test notification",
+        tag: "test",
       });
-      toast.success('Test notification sent!');
+      toast.success("Test notification sent!");
     } else {
-      toast.error('Please enable notifications first');
+      toast.error("Please enable notifications first");
     }
   };
 
   const enableNotifications = async () => {
+    if (!vehicle) {
+      toast.error("Please lookup your vehicle first");
+      return;
+    }
+
     try {
-      console.log('[Dashboard] Starting notification subscription...');
-      console.log('[Dashboard] Current permission:', Notification.permission);
-      
+      console.log("[Dashboard] Starting notification subscription...");
+      console.log("[Dashboard] Current permission:", Notification.permission);
+
       const sub = await ensurePushSubscription(
         process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!
       );
 
-      console.log('[Dashboard] Got subscription:', sub);
+      console.log("[Dashboard] Got subscription:", sub);
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API}/notifications/subscribe`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          userId: 1, // TODO: Replace with actual logged-in user ID
-          subscription: sub,
-        }),
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API}/notifications/subscribe`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            vehicleId: vehicle._id,
+            mobileNumber: vehicle.mobileNumber,
+            subscription: sub,
+          }),
+        }
+      );
 
-      console.log('[Dashboard] Subscribe response:', response.status);
+      console.log("[Dashboard] Subscribe response:", response.status);
 
       if (!response.ok) {
         throw new Error(`Subscription failed: ${response.status}`);
       }
 
       toast.success("Push notifications enabled!");
-      console.log('[Dashboard] Notification permission granted and subscribed!');
+      console.log("[Dashboard] Notification permission granted and subscribed!");
     } catch (e: any) {
-      console.error('[Dashboard] Notification error:', e);
+      console.error("[Dashboard] Notification error:", e);
       toast.error(e?.message || "Failed to enable notifications");
     }
   };
 
-  if (loading) return <p className="text-center mt-6 text-gray-600 dark:text-gray-400">Loading...</p>;
+  const handleReset = () => {
+    setVehicle(null);
+    setNotFound(false);
+    setVehicleNumber("");
+    setMobileNumber("");
+  };
 
   return (
-    <div className="w-full max-w-sm mx-auto px-4 py-6">
-      <h1 className="text-3xl font-bold mb-6 text-gray-900 dark:text-white">My Vehicles</h1>
-      
-      <div className="space-y-3 mb-6">
-        <button
-          onClick={enableNotifications}
-          className="w-full bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 py-3 rounded-lg font-medium shadow-sm hover:shadow-md active:scale-95 transition-all"
-        >
-          Enable Instant Alerts
-        </button>
-        <button
-          onClick={testNotification}
-          className="w-full bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white py-3 rounded-lg font-medium shadow-sm hover:shadow-md active:scale-95 transition-all"
-        >
-          Test Notification
-        </button>
-      </div>
+    <div className="w-full max-w-md mx-auto px-4 py-8">
+      <h1 className="text-3xl font-bold mb-2 text-gray-900 dark:text-white">
+        My Vehicle QR Code
+      </h1>
+      <p className="text-gray-600 dark:text-gray-400 mb-8 text-sm">
+        Enter your vehicle details to view or manage your QR code
+      </p>
 
-      {vehicles.length === 0 && (
-        <p className="text-gray-500 dark:text-gray-400 text-center py-8">No vehicles registered yet.</p>
+      {/* Lookup Form */}
+      {!vehicle && (
+        <form onSubmit={handleLookup} className="space-y-4 mb-6">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Vehicle Number
+            </label>
+            <input
+              type="text"
+              value={vehicleNumber}
+              onChange={(e) => setVehicleNumber(e.target.value.toUpperCase())}
+              placeholder="e.g., ABC1234"
+              required
+              className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Mobile Number
+            </label>
+            <input
+              type="tel"
+              value={mobileNumber}
+              onChange={(e) => setMobileNumber(e.target.value)}
+              placeholder="e.g., +1234567890"
+              required
+              className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white py-3 rounded-lg font-medium shadow-sm hover:shadow-md active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {loading ? "Searching..." : "Find My QR Code"}
+          </button>
+        </form>
       )}
 
-      <div className="space-y-4">
-        {vehicles.map((v) => (
-          <div
-            key={v._id}
-            className="bg-white dark:bg-gray-900 p-5 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 transition-colors"
+      {/* Not Found Message */}
+      {notFound && (
+        <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4 mb-6">
+          <p className="text-yellow-800 dark:text-yellow-200 text-sm mb-3">
+            No vehicle found with these details.
+          </p>
+          <a
+            href="/register"
+            className="inline-block w-full text-center bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white py-2.5 rounded-lg font-medium shadow-sm hover:shadow-md transition-all active:scale-95"
           >
-            <p className="text-lg font-semibold text-gray-900 dark:text-white">{v.vehicleNumber}</p>
+            Register New Vehicle
+          </a>
+        </div>
+      )}
 
-            <img
-              src={v.qrImage}
-              className="w-32 h-32 mt-4 mx-auto rounded-lg"
-              alt="QR"
-            />
+      {/* Vehicle Found */}
+      {vehicle && (
+        <div className="space-y-6">
+          <div className="bg-white dark:bg-gray-900 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800">
+            <div className="flex justify-between items-start mb-4">
+              <div>
+                <p className="text-sm text-gray-500 dark:text-gray-400">Vehicle Number</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                  {vehicle.vehicleNumber}
+                </p>
+              </div>
+              <button
+                onClick={handleReset}
+                className="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 underline"
+              >
+                Change
+              </button>
+            </div>
+
+            <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 mb-4">
+              <img
+                src={vehicle.qrImage}
+                className="w-48 h-48 mx-auto rounded-lg"
+                alt="Vehicle QR Code"
+              />
+            </div>
 
             <a
-              href={v.qrImage}
-              download={`${v.vehicleNumber}.png`}
-              className="block mt-4 w-full text-center bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white rounded-lg py-2.5 font-medium shadow-sm hover:shadow-md transition-all active:scale-95"
+              href={vehicle.qrImage}
+              download={`${vehicle.vehicleNumber}.png`}
+              className="block w-full text-center bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white rounded-lg py-3 font-medium shadow-sm hover:shadow-md transition-all active:scale-95 mb-3"
             >
-              Download QR
+              Download QR Code
             </a>
           </div>
-        ))}
-      </div>
+
+          {/* Notifications Section */}
+          <div className="space-y-3">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+              Notifications
+            </h2>
+            <button
+              onClick={enableNotifications}
+              className="w-full bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 py-3 rounded-lg font-medium shadow-sm hover:shadow-md active:scale-95 transition-all"
+            >
+              Enable Instant Alerts
+            </button>
+            <button
+              onClick={testNotification}
+              className="w-full bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-900 dark:text-white py-3 rounded-lg font-medium shadow-sm hover:shadow-md active:scale-95 transition-all"
+            >
+              Test Notification
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
