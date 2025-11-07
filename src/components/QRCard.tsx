@@ -50,39 +50,39 @@ export default function QRCard({ vehicleNumber, qrImage }: QRCardProps) {
       {/* Card */}
       <div
         ref={cardRef}
-        className="w-72 bg-white shadow-lg border rounded-xl p-4 mx-auto text-center"
+        className="w-72 bg-white shadow-lg border rounded-xl p-6 mx-auto text-center"
       >
-        <h2 className="text-xl font-bold mb-1">ScanMyCar</h2>
-        <p className="text-gray-600 text-sm mb-3">
+        <h2 className="text-2xl font-bold mb-2 text-gray-900">ScanMyCar</h2>
+        <p className="text-gray-600 text-sm mb-4">
           Scan to notify the owner
         </p>
 
         <img
           src={qrImage}
           alt="QR Code"
-          className="w-40 h-40 mx-auto"
+          className="w-40 h-40 mx-auto rounded-lg"
         />
 
-        <p className="text-gray-600 mt-3 text-xs">Vehicle Number</p>
-        <p className="text-lg font-bold">{vehicleNumber}</p>
+        <p className="text-gray-600 mt-4 text-xs font-medium">Vehicle Number</p>
+        <p className="text-xl font-bold text-gray-900">{vehicleNumber}</p>
 
-        <div className="mt-3 text-[10px] text-gray-500">
+        <div className="mt-4 text-[10px] text-gray-500">
           Generated using ScanMyCar © 2025
         </div>
       </div>
 
       {/* Download Buttons */}
-      <div className="mt-4 space-y-3">
+      <div className="mt-6 space-y-3">
         <button
           onClick={downloadPNG}
-          className="w-full bg-blue-600 text-white py-2 rounded-lg shadow hover:bg-blue-700"
+          className="w-full bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white py-3 rounded-lg shadow-sm hover:shadow-md font-medium transition-all active:scale-95"
         >
           Download PNG
         </button>
 
         <button
           onClick={downloadPDF}
-          className="w-full bg-red-600 text-white py-2 rounded-lg shadow hover:bg-red-700"
+          className="w-full bg-red-600 hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-600 text-white py-3 rounded-lg shadow-sm hover:shadow-md font-medium transition-all active:scale-95"
         >
           Download PDF
         </button>

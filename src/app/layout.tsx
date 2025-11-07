@@ -11,23 +11,23 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className="bg-gray-100 min-h-screen">
+      <body className="bg-gray-50 dark:bg-gray-950 min-h-screen transition-colors">
         <Navbar />
-<Toaster
-  position="bottom-center"
-  toastOptions={{
-    duration: 2500,
-    style: {
-      borderRadius: "10px",
-      background: "#333",
-      color: "#fff",
-    },
-  }}
-/>
-
-<main className="pt-8 px-4 max-w-md mx-auto">
-  {children}
-</main>      </body>
+        <Toaster
+          position="bottom-center"
+          toastOptions={{
+            duration: 2500,
+            style: {
+              borderRadius: "12px",
+              background: "#333",
+              color: "#fff",
+            },
+          }}
+        />
+        <main className="pt-8 px-4 max-w-md mx-auto">
+          {children}
+        </main>
+      </body>
     </html>
   );
 }

@@ -11,7 +11,7 @@ export default function Input({ value, onChange, placeholder, className }: Input
       value={value}
       onChange={onChange}
       placeholder={placeholder}
-      className={`border w-full p-3 rounded-lg bg-white ${className}`}
+      className={`w-full p-3 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent outline-none transition-all ${className}`}
     />
   );
 }

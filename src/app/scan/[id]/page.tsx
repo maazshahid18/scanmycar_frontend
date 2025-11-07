@@ -80,16 +80,16 @@ const sendAlert = async () => {
   if (loading) {
     return (
       <div className="w-full max-w-sm mx-auto px-4 py-8 animate-pulse">
-        <div className="bg-gray-300 h-6 w-40 mx-auto rounded mb-6" />
-        <div className="bg-gray-300 h-20 w-full rounded mb-4" />
+        <div className="bg-gray-300 dark:bg-gray-700 h-6 w-40 mx-auto rounded mb-6" />
+        <div className="bg-gray-300 dark:bg-gray-700 h-20 w-full rounded-lg mb-4" />
         <div className="grid grid-cols-2 gap-3 mb-4">
-          <div className="h-10 bg-gray-300 rounded" />
-          <div className="h-10 bg-gray-300 rounded" />
-          <div className="h-10 bg-gray-300 rounded" />
-          <div className="h-10 bg-gray-300 rounded" />
+          <div className="h-10 bg-gray-300 dark:bg-gray-700 rounded-lg" />
+          <div className="h-10 bg-gray-300 dark:bg-gray-700 rounded-lg" />
+          <div className="h-10 bg-gray-300 dark:bg-gray-700 rounded-lg" />
+          <div className="h-10 bg-gray-300 dark:bg-gray-700 rounded-lg" />
         </div>
-        <div className="bg-gray-300 h-24 w-full rounded mb-4" />
-        <div className="bg-gray-300 h-10 w-full rounded" />
+        <div className="bg-gray-300 dark:bg-gray-700 h-24 w-full rounded-lg mb-4" />
+        <div className="bg-gray-300 dark:bg-gray-700 h-10 w-full rounded-lg" />
       </div>
     );
   }
@@ -103,15 +103,15 @@ const sendAlert = async () => {
         animate={{ opacity: 1, scale: 1 }}
       >
         <motion.div
-          className="w-20 h-20 bg-green-500 text-white rounded-full flex items-center justify-center text-4xl"
+          className="w-20 h-20 bg-green-500 dark:bg-green-600 text-white rounded-full flex items-center justify-center text-4xl shadow-lg"
           animate={{ scale: [1, 1.2, 1] }}
           transition={{ duration: 0.8, repeat: Infinity }}
         >
           ✅
         </motion.div>
 
-        <p className="mt-4 text-xl font-semibold">Alert Sent!</p>
-        <p className="text-gray-600 mt-2 text-sm w-60">
+        <p className="mt-6 text-2xl font-semibold text-gray-900 dark:text-white">Alert Sent!</p>
+        <p className="text-gray-600 dark:text-gray-300 mt-3 text-base w-64 leading-relaxed">
           The vehicle owner has been notified successfully.
         </p>
       </motion.div>
@@ -124,25 +124,25 @@ const sendAlert = async () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
     >
-      <h1 className="text-2xl font-bold mb-4 text-center">Notify Owner</h1>
+      <h1 className="text-3xl font-bold mb-6 text-center text-gray-900 dark:text-white">Notify Owner</h1>
 
       {/* Vehicle Card */}
       <motion.div
-        className="bg-white p-4 rounded-lg shadow mb-4 text-center"
+        className="bg-white dark:bg-gray-900 p-5 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 mb-6 text-center transition-colors"
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
       >
-        <p className="text-gray-600 text-sm">Vehicle</p>
-        <p className="text-xl font-bold">{vehicle.vehicleNumber}</p>
+        <p className="text-gray-600 dark:text-gray-400 text-sm font-medium">Vehicle</p>
+        <p className="text-2xl font-bold text-gray-900 dark:text-white mt-1">{vehicle.vehicleNumber}</p>
       </motion.div>
 
       {/* Preset Message Grid */}
-      <div className="grid grid-cols-2 gap-3 mb-4">
+      <div className="grid grid-cols-2 gap-3 mb-6">
         {presets.map((text, idx) => (
           <button
             key={idx}
             onClick={() => applyPreset(text)}
-            className="w-full px-3 py-2 bg-gray-100 rounded-lg hover:bg-gray-200 text-xs text-left active:scale-95 transition"
+            className="w-full px-3 py-3 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg text-xs text-left text-gray-900 dark:text-white active:scale-95 transition-all border border-gray-200 dark:border-gray-700"
           >
             {text}
           </button>
@@ -151,7 +151,7 @@ const sendAlert = async () => {
 
       {/* Textarea */}
       <textarea
-        className="w-full border p-3 rounded-lg mb-4 text-sm"
+        className="w-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 p-4 rounded-lg mb-6 text-sm focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent outline-none transition-all resize-none"
         rows={4}
         placeholder="Enter message or tap a preset"
         value={message}
@@ -159,7 +159,7 @@ const sendAlert = async () => {
       />
 
       {/* Button */}
-      <Button onClick={sendAlert} className="w-full active:scale-95 transition">
+      <Button onClick={sendAlert} className="w-full">
         {sending ? "Sending..." : "Send Notification"}
       </Button>
     </motion.div>

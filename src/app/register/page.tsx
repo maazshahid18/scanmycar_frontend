@@ -53,30 +53,29 @@ export default function RegisterPage() {
 
   return (
     <div className="w-full max-w-sm mx-auto px-4 py-6">
-      <h1 className="text-2xl font-bold mb-4 text-center">Register Vehicle</h1>
+      <h1 className="text-3xl font-bold mb-6 text-center text-gray-900 dark:text-white">Register Vehicle</h1>
 
-      <Input
-        value={name}
-        placeholder="Your Name"
-        onChange={(e) => setName(e.target.value)}
-        className="mb-3"
-      />
+      <div className="space-y-4">
+        <Input
+          value={name}
+          placeholder="Your Name"
+          onChange={(e) => setName(e.target.value)}
+        />
 
-      <Input
-        value={mobile}
-        placeholder="Mobile Number"
-        onChange={(e) => setMobile(e.target.value)}
-        className="mb-3"
-      />
+        <Input
+          value={mobile}
+          placeholder="Mobile Number"
+          onChange={(e) => setMobile(e.target.value)}
+        />
 
-      <Input
-        value={vehicleNumber}
-        placeholder="Vehicle Number (DL8CAS6880)"
-        onChange={(e) => setVehicleNumber(e.target.value.toUpperCase())}
-        className="mb-3"
-      />
+        <Input
+          value={vehicleNumber}
+          placeholder="Vehicle Number (DL8CAS6880)"
+          onChange={(e) => setVehicleNumber(e.target.value.toUpperCase())}
+        />
+      </div>
 
-      <Button onClick={handleRegister} className="w-full mt-2">
+      <Button onClick={handleRegister} className="w-full mt-6">
         {loading ? "Generating..." : "Generate QR Code"}
       </Button>
 
