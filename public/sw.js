@@ -19,12 +19,13 @@ self.addEventListener('push', (event) => {
   const title = data.title || '🚗 ScanMyCar Alert';
   const body = data.body || 'You have a new vehicle alert';
   const url = data.url || '/dashboard';
+  const alertId = data.alertId; // ✅ Include alertId for replies
 
   console.log('[Service Worker] Showing notification:', { title, body, url });
 
   const options = {
     body,
-    data: { url },
+    data: { url, alertId },
     icon: '/icon.png',
     badge: '/badge.png',
     vibrate: [200, 100, 200],
@@ -33,6 +34,10 @@ self.addEventListener('push', (event) => {
     renotify: true,
     tag: 'scanmycar-alert',
     timestamp: Date.now(),    // ✅ Helps Chrome treat it as active
+    actions: [
+      { action: "view", title: "👀 View" },
+      { action: "reply", title: "💬 Reply" },
+    ],
   };
 
   event.waitUntil(
@@ -44,7 +49,24 @@ self.addEventListener('push', (event) => {
 
 self.addEventListener('notificationclick', function (event) {
   event.notification.close();
-  const url = event.notification.data?.url || '/dashboard';
+  const { url, alertId } = event.notification.data || {};
+
+  if (event.action === 'reply') {
+    const reply = prompt('Enter your reply message:');
+    if (reply) {
+      fetch('https://api.65.2.136.10.nip.io/alerts/reply', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ alertId, reply }),
+      }).then(() => {
+        console.log('[Service Worker] Reply sent successfully.');
+      }).catch((err) => {
+        console.error('[Service Worker] Failed to send reply:', err);
+      });
+    }
+    return;
+  }
+
   event.waitUntil(clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
     for (const client of clientList) {
       if ('focus' in client) return client.focus();
