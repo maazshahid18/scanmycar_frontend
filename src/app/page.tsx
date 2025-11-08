@@ -16,26 +16,26 @@ export default function HomePage() {
         {/* Features Grid */}
         <div className="grid md:grid-cols-3 gap-6 mb-12">
           <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
-            <div className="text-4xl mb-4">📱</div>
+            <div className="text-4xl mb-4">🔔</div>
             <h3 className="text-lg font-semibold mb-2 text-gray-900 dark:text-white">Instant Notifications</h3>
             <p className="text-gray-600 dark:text-gray-400 text-sm">
-              Receive push notifications immediately when someone scans your QR code
+              Get push notifications immediately when someone scans your QR code. Never miss an alert!
             </p>
           </div>
 
           <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
             <div className="text-4xl mb-4">🔒</div>
-            <h3 className="text-lg font-semibold mb-2 text-gray-900 dark:text-white">Privacy First</h3>
+            <h3 className="text-lg font-semibold mb-2 text-gray-900 dark:text-white">Privacy Protected</h3>
             <p className="text-gray-600 dark:text-gray-400 text-sm">
-              Your contact info stays private. Notifications come directly to your device
+              Your contact info stays private. No public display of phone numbers or personal data.
             </p>
           </div>
 
           <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
             <div className="text-4xl mb-4">⚡</div>
-            <h3 className="text-lg font-semibold mb-2 text-gray-900 dark:text-white">Quick Setup</h3>
+            <h3 className="text-lg font-semibold mb-2 text-gray-900 dark:text-white">Easy Setup</h3>
             <p className="text-gray-600 dark:text-gray-400 text-sm">
-              Register in seconds, download your QR code, and stick it on your windshield
+              Register once, enable notifications, download your QR, and you're done!
             </p>
           </div>
         </div>
@@ -67,9 +67,9 @@ export default function HomePage() {
                 1
               </div>
               <div>
-                <h4 className="font-semibold text-gray-900 dark:text-white mb-1">Register Your Vehicle</h4>
+                <h4 className="font-semibold text-gray-900 dark:text-white mb-1">Register & Enable Alerts</h4>
                 <p className="text-gray-600 dark:text-gray-400 text-sm">
-                  Enter your vehicle number and mobile number to create your unique QR code
+                  Enter your vehicle details and enable instant notifications in one simple flow
                 </p>
               </div>
             </div>
@@ -91,9 +91,9 @@ export default function HomePage() {
                 3
               </div>
               <div>
-                <h4 className="font-semibold text-gray-900 dark:text-white mb-1">Get Instant Alerts</h4>
+                <h4 className="font-semibold text-gray-900 dark:text-white mb-1">Receive Instant Notifications</h4>
                 <p className="text-gray-600 dark:text-gray-400 text-sm">
-                  When someone scans your QR, you'll receive an instant notification on your device
+                  Get notified immediately when someone scans your QR code. No delays, no missed alerts!
                 </p>
               </div>
             </div>
