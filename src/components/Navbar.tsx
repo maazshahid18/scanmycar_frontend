@@ -6,6 +6,9 @@ export default function Navbar() {
       </a>
 
       <div className="flex gap-6">
+        <a href="/find" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">
+          Find My QR
+        </a>
         <a href="/register" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">
           Register
         </a>
