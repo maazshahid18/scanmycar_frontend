@@ -54,15 +54,19 @@ self.addEventListener('notificationclick', function (event) {
   if (event.action === 'reply') {
     const reply = prompt('Enter your reply message:');
     if (reply) {
-      fetch('https://api.65.2.136.10.nip.io/alerts/reply', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ alertId, reply }),
-      }).then(() => {
-        console.log('[Service Worker] Reply sent successfully.');
-      }).catch((err) => {
-        console.error('[Service Worker] Failed to send reply:', err);
-      });
+      event.waitUntil(
+        fetch('https://api.65.2.136.10.nip.io/alerts/reply', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ alertId, reply }),
+        })
+          .then(() => {
+            console.log('[Service Worker] Reply sent successfully.');
+          })
+          .catch((err) => {
+            console.error('[Service Worker] Failed to send reply:', err);
+          })
+      );
     }
     return;
   }
