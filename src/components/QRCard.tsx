@@ -79,13 +79,6 @@ export default function QRCard({ vehicleNumber, qrImage }: QRCardProps) {
         >
           Download PNG
         </button>
-
-        <button
-          onClick={downloadPDF}
-          className="w-full bg-red-600 hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-600 text-white py-3 rounded-lg shadow-sm hover:shadow-md font-medium transition-all active:scale-95"
-        >
-          Download PDF
-        </button>
       </div>
     </div>
   );

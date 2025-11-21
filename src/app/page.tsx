@@ -23,7 +23,7 @@ export default function HomePage() {
               Register Your Vehicle
             </a>
             <a
-              href="/dashboard"
+              href="/find"
               className="w-full sm:w-auto inline-block bg-white hover:bg-gray-50 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-600 px-8 py-4 rounded-xl text-lg font-medium shadow-sm hover:shadow-md transition-all active:scale-95 text-center"
             >
               View My QR Code
