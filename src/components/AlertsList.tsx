@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { motion, AnimatePresence } from "framer-motion";
 import toast from "react-hot-toast";
+import { useSearchParams } from "next/navigation";
 
 interface Alert {
     id: number;
@@ -23,6 +24,8 @@ export default function AlertsList() {
     const [replyText, setReplyText] = useState("");
     const [submitting, setSubmitting] = useState(false);
 
+    const searchParams = useSearchParams();
+
     // TODO: Replace with actual logged-in user ID
     const OWNER_ID = 1;
 
@@ -32,6 +35,20 @@ export default function AlertsList() {
                 `http://localhost:3000/alerts/owner/${OWNER_ID}`
             );
             setAlerts(response.data);
+
+            // Check for replyTo param after fetching
+            const replyToId = searchParams.get("replyTo");
+            if (replyToId) {
+                const id = Number(replyToId);
+                if (!isNaN(id)) {
+                    setReplyingTo(id);
+                    // Optional: Scroll to the alert
+                    setTimeout(() => {
+                        const element = document.getElementById(`alert-${id}`);
+                        if (element) element.scrollIntoView({ behavior: "smooth" });
+                    }, 500);
+                }
+            }
         } catch (error) {
             console.error("Failed to fetch alerts", error);
         } finally {
@@ -93,6 +110,7 @@ export default function AlertsList() {
                         alerts.map((alert) => (
                             <motion.div
                                 key={alert.id}
+                                id={`alert-${alert.id}`}
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, scale: 0.95 }}

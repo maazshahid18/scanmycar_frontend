@@ -9,8 +9,8 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('push', (event) => {
   console.log('[Service Worker] Push event received:', event);
   let data = {};
-  try { 
-    data = event.data.json(); 
+  try {
+    data = event.data.json();
     console.log('[Service Worker] Push data:', data);
   } catch (e) {
     console.error('[Service Worker] Failed to parse push data:', e);
@@ -51,30 +51,23 @@ self.addEventListener('notificationclick', function (event) {
   event.notification.close();
   const { url, alertId } = event.notification.data || {};
 
-  if (event.action === 'reply') {
-    const reply = prompt('Enter your reply message:');
-    if (reply) {
-      event.waitUntil(
-        fetch('https://api.65.2.136.10.nip.io/alerts/reply', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ alertId, reply }),
-        })
-          .then(() => {
-            console.log('[Service Worker] Reply sent successfully.');
-          })
-          .catch((err) => {
-            console.error('[Service Worker] Failed to send reply:', err);
-          })
-      );
-    }
-    return;
+  // Construct URL with replyTo parameter if action is reply
+  let targetUrl = url || '/dashboard';
+  if (event.action === 'reply' && alertId) {
+    targetUrl = `/dashboard?replyTo=${alertId}`;
   }
 
-  event.waitUntil(clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
-    for (const client of clientList) {
-      if ('focus' in client) return client.focus();
-    }
-    if (clients.openWindow) return clients.openWindow(url);
-  }));
+  event.waitUntil(
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
+      // Check if there's already a tab open
+      for (const client of clientList) {
+        if (client.url && client.url.includes('/dashboard') && 'focus' in client) {
+          // If tab exists, navigate it to the new URL (to trigger query param change) and focus
+          return client.navigate(targetUrl).then(c => c.focus());
+        }
+      }
+      // If no tab open, open a new one
+      if (clients.openWindow) return clients.openWindow(targetUrl);
+    })
+  );
 });
