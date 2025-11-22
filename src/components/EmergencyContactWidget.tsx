@@ -4,18 +4,19 @@ import { useState } from "react";
 import axios from "axios";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
 
 export default function EmergencyContactWidget() {
     const [contact, setContact] = useState("");
     const [loading, setLoading] = useState(false);
-    const OWNER_ID = 1; // Hardcoded for now
+    const { user } = useCurrentUser();
 
     const handleSave = async () => {
-        if (!contact.trim()) return;
+        if (!contact.trim() || !user) return;
 
         setLoading(true);
         try {
-            await axios.put(`http://localhost:3000/users/${OWNER_ID}/emergency-contact`, {
+            await axios.put(`http://localhost:3000/users/${user.ownerId}/emergency-contact`, {
                 contact,
             });
             toast.success("Emergency contact updated!");

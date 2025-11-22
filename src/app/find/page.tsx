@@ -28,6 +28,15 @@ export default function FindMyQR() {
 
       if (response.data) {
         setVehicle(response.data);
+
+        // ✅ Store user info in localStorage
+        localStorage.setItem('scanmycar_user', JSON.stringify({
+          ownerId: response.data.ownerId,
+          vehicleId: response.data._id,
+          vehicleNumber: response.data.vehicleNumber,
+          mobileNumber: response.data.mobileNumber,
+        }));
+
         toast.success("Vehicle found!");
       } else {
         setNotFound(true);

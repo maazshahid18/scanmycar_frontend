@@ -5,6 +5,7 @@ import axios from "axios";
 import { motion, AnimatePresence } from "framer-motion";
 import toast from "react-hot-toast";
 import { useSearchParams } from "next/navigation";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
 
 interface Alert {
     id: number;
@@ -25,14 +26,17 @@ export default function AlertsList() {
     const [submitting, setSubmitting] = useState(false);
 
     const searchParams = useSearchParams();
-
-    // TODO: Replace with actual logged-in user ID
-    const OWNER_ID = 1;
+    const { user } = useCurrentUser();
 
     const fetchAlerts = async () => {
+        if (!user) {
+            setLoading(false);
+            return;
+        }
+
         try {
             const response = await axios.get(
-                `http://localhost:3000/alerts/owner/${OWNER_ID}`
+                `http://localhost:3000/alerts/owner/${user.ownerId}`
             );
             setAlerts(response.data);
 
@@ -60,7 +64,7 @@ export default function AlertsList() {
         fetchAlerts();
         const interval = setInterval(fetchAlerts, 10000); // Poll every 10s
         return () => clearInterval(interval);
-    }, []);
+    }, [user]);
 
     const handleReply = async (alertId: number) => {
         if (!replyText.trim()) return;

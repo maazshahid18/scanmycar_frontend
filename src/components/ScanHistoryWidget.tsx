@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { motion } from "framer-motion";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
 
 interface DailyStat {
     day: string;
@@ -12,13 +13,18 @@ interface DailyStat {
 export default function ScanHistoryWidget() {
     const [stats, setStats] = useState<DailyStat[]>([]);
     const [loading, setLoading] = useState(true);
-    const OWNER_ID = 1; // Hardcoded for now
+    const { user } = useCurrentUser();
 
     useEffect(() => {
         const fetchStats = async () => {
+            if (!user) {
+                setLoading(false);
+                return;
+            }
+
             try {
                 const response = await axios.get(
-                    `http://localhost:3000/vehicles/stats/${OWNER_ID}`
+                    `http://localhost:3000/vehicles/stats/${user.ownerId}`
                 );
                 setStats(response.data);
             } catch (error) {
@@ -29,7 +35,7 @@ export default function ScanHistoryWidget() {
         };
 
         fetchStats();
-    }, []);
+    }, [user]);
 
     const maxCount = Math.max(...stats.map((s) => s.count), 1);
 
