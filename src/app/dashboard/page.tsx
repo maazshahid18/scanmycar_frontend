@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import DashboardWidgets from "@/components/DashboardWidgets";
 import AlertsList from "@/components/AlertsList";
 
@@ -22,7 +23,9 @@ export default function Dashboard() {
       </div>
 
       <DashboardWidgets />
-      <AlertsList />
+      <Suspense fallback={<div>Loading messages...</div>}>
+        <AlertsList />
+      </Suspense>
     </div>
   );
 }
